@@ -115,22 +115,14 @@ class CSetupNotebook extends w2p_System_Setup
             $i++;
         }
 
+        $this->addColumns();
+
         return parent::install();
 	}
 
     public function upgrade($old_version) {
         switch ($old_version) {
             case '3.0.0':
-                $q = $this->_getQuery();
-                $q->alterTable('notes');
-                $q->addField('note_name', 'varchar(255)');
-                $q->exec();
-
-                $q->clear();
-                $q->addTable('notes');
-                $q->addUpdate('note_name', 'note_title', false, true);
-                $q->exec();
-
                 $this->addColumns();
             default:
                 //do nothing
@@ -140,6 +132,16 @@ class CSetupNotebook extends w2p_System_Setup
 
     private function addColumns()
     {
+        $q = $this->_getQuery();
+        $q->alterTable('notes');
+        $q->addField('note_name', 'varchar(255)');
+        $q->exec();
+
+        $q->clear();
+        $q->addTable('notes');
+        $q->addUpdate('note_name', 'note_title', false, true);
+        $q->exec();
+
         $module = new w2p_Core_Module();
         $fieldList = array('note_name', 'note_category', 'note_status', 'note_project', 'note_task',
             'note_creator', 'note_created');
