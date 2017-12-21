@@ -32,24 +32,19 @@ class CNotebook extends w2p_Core_BaseObject
 		parent::__construct('notes', 'note_id', 'notebook');
 	}
 
-	public function check()
-	{
-		// ensure the integrity of some variables
-		$this->note_id = intval($this->note_id);
-		$this->note_parent = intval($this->note_parent);
-		$this->note_category = intval($this->note_category);
-		$this->note_task = intval($this->note_task);
-		$this->note_project = intval($this->note_project);
-		$this->note_company = intval($this->note_company);
-		$this->note_creator = intval($this->note_creator);
-		$this->note_modified_by = intval($this->note_modified_by);
-		$this->note_file = intval($this->note_file);
-		$this->note_record_id = intval($this->note_record_id);
-		$this->note_module = intval($this->note_module);
-		$this->note_private = intval($this->note_private);
+    public function isValid()
+    {
+        $baseErrorMsg = get_class($this) . '::store-check failed - ';
 
-		return null; // object is ok
-	}
+        if ('' == trim($this->note_title)) {
+            $this->_error['note_title'] = $baseErrorMsg . 'note title is not set';
+        }
+        if ('' == trim($this->note_body)) {
+            $this->_error['note_body'] = $baseErrorMsg . 'note body is not set';
+        }
+
+        return (count($this->_error)) ? false : true;
+    }
 
     public function hook_search()
     {
