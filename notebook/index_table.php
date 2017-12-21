@@ -4,6 +4,7 @@ if (!defined('W2P_BASE_DIR')) {
 }
 global $AppUI, $deny1, $canRead, $canEdit;
 global $company_id, $project_id, $task_id, $user_id, $note_status, $showCompany, $m, $tab, $search_string;
+global $company;
 
 $page = (int) w2PgetParam($_GET, 'page', 1);
 $search = w2PgetParam($_REQUEST, 'search', '');
@@ -45,7 +46,13 @@ if (!empty($search_string)) {
     $q->addWhere('note_name LIKE "%' . $search_string . '%" OR note_body LIKE "%' . $search_string . '%"' );
 }
 if ($company_id) { // Company
-	$q->addWhere('(note_company = ' . (int)$company_id . ')');
+	$_projects = $company->projects($AppUI, $company_id, -1);
+	foreach($_projects as $_project) {
+	    $projects[] = $_project['project_id'];
+    }
+    $projects = implode(',', $projects);
+
+    $q->addWhere('(note_company = ' . (int)$company_id . ' OR note_project IN (' . $projects . '))');
 }
 if ($project_id) { // Project
 	$q->addWhere('(note_project = ' . (int)$project_id . ')');
@@ -66,7 +73,6 @@ $q->addWhere('(note_private = 0 OR note_creator = ' . (int)$AppUI->user_id . ')'
 $project->setAllowedSQL($AppUI->user_id, $q, 'note_project');
 $task->setAllowedSQL($AppUI->user_id, $q, 'note_task');
 $q->addOrder('company_name, note_name');
-
 $items = $q->loadList();
 
 $module = new w2p_System_Module();
