@@ -36,8 +36,8 @@ class CNotebook extends w2p_Core_BaseObject
     {
         $baseErrorMsg = get_class($this) . '::store-check failed - ';
 
-        if ('' == trim($this->note_title)) {
-            $this->_error['note_title'] = $baseErrorMsg . 'note title is not set';
+        if ('' == trim($this->note_name)) {
+            $this->_error['note_name'] = $baseErrorMsg . 'note name is not set';
         }
         if ('' == trim($this->note_body)) {
             $this->_error['note_body'] = $baseErrorMsg . 'note body is not set';
