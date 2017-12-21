@@ -5,7 +5,7 @@ if (!defined('W2P_BASE_DIR')) {
 
 $company_id = $AppUI->processIntState('NoteIdxCompany', $_POST, 'company_id', 0);
 $project_id = $AppUI->processIntState('NoteIdxProject', $_POST, 'project_id', 0);
-$note_status = $AppUI->processIntState('NoteIdxStatus', $_POST, 'note_status', 0);
+$note_status = $AppUI->processIntState('NoteIdxStatus', $_POST, 'note_status', -1);
 
 
 if (w2PgetParam($_GET, 'tab', -1) != -1) {
